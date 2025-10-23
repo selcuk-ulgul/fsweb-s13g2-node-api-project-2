@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     const posts = await userDb.find();
     res.status(200).json(posts);
-  } catch  {
+  } catch {
     res.status(500).json({ message: "Gönderiler alınamadı" });
   }
 });
@@ -19,7 +19,9 @@ router.get("/:id", async (req, res) => {
   try {
     const post = await userDb.findById(req.params.id);
     if (!post) {
-      return res.status(404).json({ message: "Belirtilen ID'li gönderi bulunamadı" });
+      return res
+        .status(404)
+        .json({ message: "Belirtilen ID'li gönderi bulunamadı" });
     }
     res.status(200).json(post);
   } catch {
@@ -29,10 +31,12 @@ router.get("/:id", async (req, res) => {
 
 // 3 [POST] /api/posts
 router.post("/", async (req, res) => {
-  const title= req.body.title;
-  const  contents  = req.body.contents;
+  const title = req.body.title;
+  const contents = req.body.contents;
   if (!title || !contents) {
-    return res.status(400).json({ message: "Lütfen gönderi için bir title ve contents sağlayın" });
+    return res
+      .status(400)
+      .json({ message: "Lütfen gönderi için bir title ve contents sağlayın" });
   }
 
   try {
@@ -40,29 +44,35 @@ router.post("/", async (req, res) => {
     const newCreated = await userDb.findById(post.id);
     res.status(201).json(newCreated);
   } catch {
-    res.status(500).json({ message: "Veritabanına kaydedilirken bir hata oluştu" });
+    res
+      .status(500)
+      .json({ message: "Veritabanına kaydedilirken bir hata oluştu" });
   }
 });
 
 // 4 [PUT] /api/posts/:id
 router.put("/:id", async (req, res) => {
- const title= req.body.title;
-  const  contents  = req.body.contents;
+  const title = req.body.title;
+  const contents = req.body.contents;
 
   if (!title || !contents) {
-    return res.status(400).json({ message: "Lütfen gönderi için title ve contents sağlayın" });
+    return res
+      .status(400)
+      .json({ message: "Lütfen gönderi için title ve contents sağlayın" });
   }
 
   try {
     const old = await userDb.findById(req.params.id);
     if (!old) {
-      return res.status(404).json({ message: "Belirtilen ID'li gönderi bulunamadı" });
+      return res
+        .status(404)
+        .json({ message: "Belirtilen ID'li gönderi bulunamadı" });
     }
 
     await userDb.update(req.params.id, { title, contents });
     const updated = await userDb.findById(req.params.id);
     res.status(200).json(updated);
-  } catch  {
+  } catch {
     res.status(500).json({ message: "Gönderi bilgileri güncellenemedi" });
   }
 });
@@ -72,12 +82,14 @@ router.delete("/:id", async (req, res) => {
   try {
     const post = await userDb.findById(req.params.id);
     if (!post) {
-      return res.status(404).json({ message: "Belirtilen ID li gönderi bulunamadı" });
+      return res
+        .status(404)
+        .json({ message: "Belirtilen ID li gönderi bulunamadı" });
     }
 
     await userDb.remove(req.params.id);
     res.status(200).json(post);
-  } catch  {
+  } catch {
     res.status(500).json({ message: "Gönderi silinemedi" });
   }
 });
@@ -87,12 +99,14 @@ router.get("/:id/comments", async (req, res) => {
   try {
     const post = await userDb.findById(req.params.id);
     if (!post) {
-      return res.status(404).json({ message: "Girilen ID'li gönderi bulunamadı." });
+      return res
+        .status(404)
+        .json({ message: "Girilen ID'li gönderi bulunamadı." });
     }
 
     const comments = await userDb.findPostComments(req.params.id);
     res.status(200).json(comments);
-  } catch  {
+  } catch {
     res.status(500).json({ message: "Yorumlar bilgisi getirilemedi" });
   }
 });
